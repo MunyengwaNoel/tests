@@ -1,4 +1,7 @@
 from flask import Flask, jsonify
+from flask import request
+import uuid
+from datetime import datetime
 
 app = Flask(__name__)
 
@@ -11,6 +14,111 @@ def get_policy():
 @app.route('/flex-policies', methods=['GET'])
 def get_flex_policy():
     return jsonify(flex_policies)
+
+
+@app.route('/dependants', methods=['GET'])
+def get_dependants():
+    return jsonify({"success": True, "data": [
+        {
+            "id": "55321d5a-f054-4402-9fa0-a3b4c7b1b6bb",
+            "userId": "d2f52404-1041-701e-e810-4dc57855f83d",
+            "title": "Mr",
+            "relationship": "Brother",
+            "gender": "male",
+            "firstName": "James",
+            "lastName": "Murphy",
+            "nationalId": "1400009M12",
+            "passportNumber": None,
+            "dateOfBirth": "1980-06-20T00:00:00.000000Z",
+            "phoneNumber": "+263712252252",
+            "email": None,
+            "province": "Midlands",
+            "address": "44 Mainway Meadows",
+            "lifeInsurances": [],
+            "travelInsurances": []
+        },
+        {
+            "id": "3d22372e-0d73-4d6d-92aa-2c02a5aace5f",
+            "userId": "d2f52404-1041-701e-e810-4dc57855f83d",
+            "title": "Mrs",
+            "relationship": "Wifey",
+            "gender": "male",
+            "firstName": "Layla",
+            "lastName": "Murphy",
+            "nationalId": "1500009M12",
+            "passportNumber": None,
+            "dateOfBirth": "1990-06-20T00:00:00.000000Z",
+            "phoneNumber": "+263712252009",
+            "email": None,
+            "province": "Midlands",
+            "address": "44 Mainway Meadows",
+            "lifeInsurances": [],
+            "travelInsurances": []
+        },
+        {
+            "id": "79e0379f-8699-464e-afc4-652aeb8a328e",
+            "userId": "d2f52404-1041-701e-e810-4dc57855f83d",
+            "title": "Miss",
+            "relationship": "Daughter",
+            "gender": "male",
+            "firstName": "Elen",
+            "lastName": "Murphy",
+            "nationalId": "1700009M12",
+            "passportNumber": None,
+            "dateOfBirth": "2015-06-20T00:00:00.000000Z",
+            "phoneNumber": None,
+            "email": None,
+            "province": "Midlands",
+            "address": "44 Mainway Meadows",
+            "lifeInsurances": [],
+            "travelInsurances": []
+        }
+    ]})
+
+
+dependants_store = []
+
+
+@app.route('/dependants', methods=['POST'])
+def add_dependants():
+    data = request.get_json()
+    user_id = data.get('userId')
+    dependants = data.get('dependants', [])
+    response_data = []
+
+    for dep in dependants:
+        dep_id = str(uuid.uuid4())
+        date_of_birth = dep.get('dateOfBirth')
+        # Format dateOfBirth to "YYYY-MM-DDT00:00:00.000000Z"
+        dob_formatted = None
+        if date_of_birth:
+            try:
+                dob_obj = datetime.strptime(date_of_birth, "%Y-%m-%d")
+                dob_formatted = dob_obj.strftime(
+                    "%Y-%m-%dT00:00:00.000000Z")
+            except Exception:
+                dob_formatted = date_of_birth  # fallback
+
+        dependant_obj = {
+            "id": dep_id,
+            "userId": user_id,
+            "title": dep.get("title"),
+            "relationship": dep.get("relationship"),
+            "gender": dep.get("gender"),
+            "firstName": dep.get("firstName"),
+            "lastName": dep.get("lastName"),
+            "nationalId": dep.get("nationalId"),
+            "passportNumber": None,
+            "dateOfBirth": dob_formatted,
+            "phoneNumber": dep.get("phoneNumber") or None,
+            "email": dep.get("email") or None,
+            "province": dep.get("province"),
+            "address": dep.get("address")
+        }
+        dependants_store.append(dependant_obj)
+        response_data.append(dependant_obj)
+
+    return jsonify({"success": True, "data": response_data}), 201
 
 
 policies = {
