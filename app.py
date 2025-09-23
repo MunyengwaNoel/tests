@@ -120,6 +120,73 @@ def add_dependants():
 
     return jsonify({"success": True, "data": response_data}), 201
 
+# Get riders
+
+
+@app.route('/riders', methods=['GET'])
+def get_riders():
+    return jsonify(riders)
+
+
+riders = {
+    "success": True,
+    "message": "Riders retrieved successfully",
+    "data": [
+        {
+            "id": "c5b908b8-ccf9-4527-bd5b-dbb873507557",
+            "name": "Income Stabilisation",
+            "description": "Provides monthly income stabilization",
+            "extra_premium": "25.00",
+            "active": True,
+            "metadata": {
+                "max_amount": 2500,
+                "min_amount": 500,
+                "max_for_dependents": 1000,
+                "applicable_to": "main_member_only"
+            },
+            "created_at": "2025-06-09T09:32:29.000000Z",
+            "updated_at": "2025-06-09T09:32:29.000000Z"
+        },
+        {
+            "id": "a1b908b8-ccf9-4527-bd5b-dbb873507558",
+            "name": "Additional Cash",
+            "description": "Provides additional cash benefits",
+            "extra_premium": "15.00",
+            "active": True,
+            "metadata": {
+                "max_amount": 2500,
+                "min_amount": 500,
+                "max_for_dependents": 1000
+            },
+            "created_at": "2025-06-09T09:32:29.000000Z",
+            "updated_at": "2025-06-09T09:32:29.000000Z"
+        },
+        {
+            "id": "b2c908b8-ccf9-4527-bd5b-dbb873507559",
+            "name": "Memorial Service",
+            "description": "Covers memorial service expenses",
+            "extra_premium": "10.00",
+            "active": True,
+            "metadata": {
+                "max_for_child_dependent": 500
+            },
+            "created_at": "2025-06-09T09:32:29.000000Z",
+            "updated_at": "2025-06-09T09:32:29.000000Z"
+        },
+        {
+            "id": "d3e908b8-ccf9-4527-bd5b-dbb873507560",
+            "name": "Tombstone",
+            "description": "Covers tombstone expenses",
+            "extra_premium": "10.00",
+            "active": True,
+            "metadata": {
+                "max_for_child_dependent": 500
+            },
+            "created_at": "2025-06-09T09:32:29.000000Z",
+            "updated_at": "2025-06-09T09:32:29.000000Z"
+        }
+    ]
+}
 
 policies = {
     "success": True,
