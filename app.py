@@ -24,7 +24,7 @@ def get_flex_policy():
     return jsonify(flex_policies)
 
 @app.route("/premiums/payment", methods=["POST"])
-def process_payment():
+def pay_premium():
     try:
         data = request.get_json()
 
