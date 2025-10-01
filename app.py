@@ -23,6 +23,42 @@ def get_policy():
 def get_flex_policy():
     return jsonify(flex_policies)
 
+@app.route("/premiums/payment", methods=["POST"])
+def process_payment():
+    try:
+        data = request.get_json()
+
+        insurance_id = data.get("insuranceId")
+        insurance_type = data.get("insuranceType")
+        use_previous_payment_method = data.get("usePreviousPaymentMethod", False)
+
+        payment_details = data.get("paymentDetails", {})
+        payment_method = payment_details.get("paymentMethod")
+        account_number = payment_details.get("accountNumber")
+        months = payment_details.get("months")
+
+        # Simulate payment processing (you can add your logic here)
+        result = {
+            "status": "success",
+            "message": f"Payment for {insurance_type} processed successfully",
+            "data": {
+                "insuranceId": insurance_id,
+                "insuranceType": insurance_type,
+                "usePreviousPaymentMethod": use_previous_payment_method,
+                "paymentDetails": {
+                    "paymentMethod": payment_method,
+                    "accountNumber": account_number,
+                    "months": months
+                }
+            }
+        }
+
+        return jsonify(result), 201
+
+    except Exception as e:
+        return jsonify({"status": "error", "message": str(e)}), 500
+
+
 # Configure uploads folder
 UPLOAD_FOLDER = "uploads"
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
