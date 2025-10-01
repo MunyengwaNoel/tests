@@ -1,6 +1,9 @@
 from flask import Flask, jsonify
 from flask import request
 import uuid
+import os
+from werkzeug.utils import secure_filename
+
 from datetime import datetime
 
 app = Flask(__name__)
@@ -20,6 +23,82 @@ def get_policy():
 def get_flex_policy():
     return jsonify(flex_policies)
 
+# Configure uploads folder
+UPLOAD_FOLDER = "uploads"
+os.makedirs(UPLOAD_FOLDER, exist_ok=True)
+app.config["UPLOAD_FOLDER"] = UPLOAD_FOLDER
+
+
+@app.route("/funeral/claim", methods=["POST"])
+def submit_claim():
+    try:
+        # ✅ Text fields
+        insurance_id = request.form.get("insuranceId")
+        dependant_id = request.form.get("dependantId")
+        phone = request.form.get("phone")
+        email = request.form.get("email")
+        policy_type = request.form.get("policyType")
+        deceased_name = request.form.get("deceasedName")
+        deceased_date_of_death = request.form.get("deceasedDateOfDeath")
+        cause_of_death = request.form.get("causeOfDeath")
+        place_of_death = request.form.get("placeOfDeath")
+
+        # ✅ File uploads
+        burial_order_file = request.files.get("burialOrderNumber")
+        policy_holder_id_file = request.files.get("policyHolderIdCopy")
+        death_certificate_file = request.files.get("deathCertificate")
+
+        proof_of_banking_file = request.files.get("bankDetails[proofOfBanking]")
+        affidavit_file = request.files.get("bankDetails[affidavit]")
+
+        # ✅ Bank details (nested keys are sent as form fields)
+        account_number = request.form.get("bankDetails[accountNumber]")
+        account_type = request.form.get("bankDetails[accountType]")
+        account_holder_name = request.form.get("bankDetails[accountHolderName]")
+        bank_name = request.form.get("bankDetails[bankName]")
+
+        # Save uploaded files
+        saved_files = {}
+        for key, file in {
+            "burial_order": burial_order_file,
+            "policy_holder_id": policy_holder_id_file,
+            "death_certificate": death_certificate_file,
+            "proof_of_banking": proof_of_banking_file,
+            "affidavit": affidavit_file,
+        }.items():
+            if file:
+                filename = secure_filename(file.filename)
+                filepath = os.path.join(app.config["UPLOAD_FOLDER"], filename)
+                file.save(filepath)
+                saved_files[key] = filepath
+
+        # ✅ Build response
+        response = {
+            "message": "Claim received successfully",
+            "data": {
+                "insuranceId": insurance_id,
+                "dependantId": dependant_id,
+                "phone": phone,
+                "email": email,
+                "policyType": policy_type,
+                "deceasedName": deceased_name,
+                "deceasedDateOfDeath": deceased_date_of_death,
+                "causeOfDeath": cause_of_death,
+                "placeOfDeath": place_of_death,
+                "bankDetails": {
+                    "accountNumber": account_number,
+                    "accountType": account_type,
+                    "accountHolderName": account_holder_name,
+                    "bankName": bank_name,
+                },
+                "uploadedFiles": saved_files,
+            },
+        }
+
+        return jsonify(response), 201
+
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
 
 @app.route('/dependants', methods=['GET'])
 def get_dependants():
