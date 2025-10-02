@@ -23,6 +23,65 @@ def get_policy():
 def get_flex_policy():
     return jsonify(flex_policies)
 
+@app.route("/riders", methods=["POST"])
+def add_riders():
+    try:
+        data = request.get_json()
+
+        # Extract request body
+        rider_id = data.get("riderId")
+        cover_amount = data.get("coverAmount")
+        dependants = data.get("dependants", [])
+
+        # Normally you'd fetch these details from DB
+        rider_name = "Memorial Service"
+        rider_description = "Covers memorial service expenses"
+
+        # Simulate premium calculation (replace with real business logic)
+        main_rider_premium = "10.00"
+        dependant_rider_premium = "10.00"
+        current_premium = "5.50"
+        new_premium = 25.5
+
+        # Build response
+        response = {
+            "success": True,
+            "message": "Riders premiums processed successfully",
+            "data": {
+                "insuranceId": "325cd635-ae3c-414e-84fa-e0da3f1f81ac",
+                "attachedRiders": {
+                    "mainRider": [
+                        {
+                            "coverAmount": cover_amount,
+                            "riderId": rider_id,
+                            "premium": main_rider_premium,
+                            "name": rider_name,
+                            "description": rider_description
+                        }
+                    ],
+                    "dependants": [
+                        {
+                            "riderId": dep.get("riderId"),
+                            "coverAmount": dep.get("coverAmount"),
+                            "premium": dependant_rider_premium,
+                            "dependantId": dep.get("dependantId"),
+                            "name": rider_name,
+                            "description": rider_description
+                        }
+                        for dep in dependants
+                    ]
+                },
+                "currentPremium": current_premium,
+                "newPremium": new_premium
+            }
+        }
+
+        return jsonify(response), 201
+
+    except Exception as e:
+        return jsonify({"success": False, "message": str(e)}), 500
+
+
 @app.route("/premiums/payment", methods=["POST"])
 def pay_premium():
     try:
