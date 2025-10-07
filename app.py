@@ -9,21 +9,21 @@ from datetime import datetime
 app = Flask(__name__)
 
 
-@app.route('/policies/subscribed', methods=['GET'])
+@app.route('/insurance/list/LifeInsurance', methods=['GET'])
 def get_subscribed_policies():
     return jsonify(subsrcibed_policies)
 
 
-@app.route('/policies', methods=['GET'])
+@app.route('/funeral-policies', methods=['GET'])
 def get_policy():
     return jsonify(policies)
 
 
-@app.route('/insurance/switch/flex', methods=['GET'])
+@app.route('/flex-policies', methods=['GET'])
 def get_flex_policy():
     return jsonify(flex_policies)
 
-@app.route("/upgrade-flex-policy", methods=["POST"])
+@app.route("/insurance/switch/flex", methods=["POST"])
 def upgrade_flex_policy():
     try:
         data = request.get_json()
@@ -176,7 +176,7 @@ def upgrade_policy():
         return jsonify({"success": False, "message": str(e)}), 500
 
 
-@app.route("/riders", methods=["POST"])
+@app.route("/riders/attach", methods=["POST"])
 def add_riders():
     try:
         data = request.get_json()
@@ -277,7 +277,7 @@ os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 app.config["UPLOAD_FOLDER"] = UPLOAD_FOLDER
 
 
-@app.route("/funeral/claim", methods=["POST"])
+@app.route("/claims/life", methods=["POST"])
 def submit_claim():
     try:
         # ✅ Text fields
@@ -348,7 +348,7 @@ def submit_claim():
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
-@app.route('/dependants', methods=['GET'])
+@app.route('/dependants/list', methods=['GET'])
 def get_dependants():
     return jsonify({"success": True, "data": [
         {
@@ -455,7 +455,7 @@ def add_dependants():
 # Get riders
 
 
-@app.route('/riders', methods=['GET'])
+@app.route('/riders/list', methods=['GET'])
 def get_riders():
     return jsonify(riders)
 
