@@ -251,8 +251,8 @@ def pay_premium():
 
         # Simulate payment processing (you can add your logic here)
         result = {
-            "status": "success",
-            "message": f"Payment for {insurance_type} processed successfully",
+            "status": False,
+            "message": f"Payment for {insurance_type} failed",
             "data": {
                 "insuranceId": insurance_id,
                 "insuranceType": insurance_type,
