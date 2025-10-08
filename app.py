@@ -411,7 +411,7 @@ def get_dependants():
 dependants_store = []
 
 
-@app.route('/dependants', methods=['POST'])
+@app.route('/dependants/add', methods=['POST'])
 def add_dependants():
     data = request.get_json()
     user_id = data.get('userId')
