@@ -363,7 +363,7 @@ def get_dependants():
             "passportNumber": None,
             "dateOfBirth": "1980-06-20T00:00:00.000000Z",
             "phoneNumber": "+263712252252",
-            "email": None,
+            "email": "test@usu.co.zw",
             "province": "Midlands",
             "address": "44 Mainway Meadows",
             "lifeInsurances": [],
