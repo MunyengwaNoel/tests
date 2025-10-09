@@ -248,6 +248,7 @@ def pay_premium():
         payment_method = payment_details.get("paymentMethod")
         account_number = payment_details.get("accountNumber")
         months = payment_details.get("months")
+        amount = payment_details.get("amount")
 
         # Simulate payment processing (you can add your logic here)
         result = {
@@ -260,7 +261,8 @@ def pay_premium():
                 "paymentDetails": {
                     "paymentMethod": payment_method,
                     "accountNumber": account_number,
-                    "months": months
+                    "months": months,
+                    "amount": amount,
                 }
             }
         }
