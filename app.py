@@ -351,24 +351,24 @@ def submit_claim():
 @app.route('/dependants/list', methods=['GET'])
 def get_dependants():
     return jsonify({"success": True, "data": [
-        # {
-        #     "id": "55321d5a-f054-4402-9fa0-a3b4c7b1b6bb",
-        #     "userId": "d2f52404-1041-701e-e810-4dc57855f83d",
-        #     "title": "Mr",
-        #     "relationship": "Brother",
-        #     "gender": "male",
-        #     "firstName": "James",
-        #     "lastName": "Murphy",
-        #     "nationalId": "1400009M12",
-        #     "passportNumber": None,
-        #     "dateOfBirth": "1980-06-20T00:00:00.000000Z",
-        #     "phoneNumber": "+263712252252",
-        #     "email": None,
-        #     "province": "Midlands",
-        #     "address": "44 Mainway Meadows",
-        #     "lifeInsurances": [],
-        #     "travelInsurances": []
-        # },
+        {
+            "id": "55321d5a-f054-4402-9fa0-a3b4c7b1b6bb",
+            "userId": "d2f52404-1041-701e-e810-4dc57855f83d",
+            "title": "Mr",
+            "relationship": "Brother",
+            "gender": "male",
+            "firstName": "James",
+            "lastName": "Murphy",
+            "nationalId": "1400009M12",
+            "passportNumber": None,
+            "dateOfBirth": "1980-06-20T00:00:00.000000Z",
+            "phoneNumber": "+263712252252",
+            "email": None,
+            "province": "Midlands",
+            "address": "44 Mainway Meadows",
+            "lifeInsurances": [],
+            "travelInsurances": []
+        },
         # {
         #     "id": "3d22372e-0d73-4d6d-92aa-2c02a5aace5f",
         #     "userId": "d2f52404-1041-701e-e810-4dc57855f83d",
