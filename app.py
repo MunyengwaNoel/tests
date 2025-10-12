@@ -105,6 +105,47 @@ def upgrade_flex_policy():
         return jsonify({"success": False, "message": str(e)}), 500
 
 
+@app.route("/insurance/funeral/process", methods=["POST"])
+def buy_funeral_insurance():
+    try:
+        data = request.get_json()
+
+        # Extract required fields from request body
+        user_id = data.get("userId")
+        currency_code = data.get("currencyCode")
+        funeral_policy_id = data.get("funeralPolicyId")
+        dependants = data.get("dependants", [])
+        payment_details = data.get("paymentDetails", {})
+
+        # Mock logic - in production, you'd validate, compute amount, store in DB, etc.
+        # For now, simulate a fixed result:
+        response = {
+            "success": True,
+            "data": {
+                "status": "PENDING",
+                "message": None,
+                "transaction_id": 2,
+                "insurance_id": 2,
+                "amount": 11.25,
+                "currency": currency_code,
+                "payment_id": 2,
+                "checkout_id": None,
+                "checkout_ndc": None,
+                "build_number": None,
+                "description": None,
+                "payment_method": "EcoCash",
+                "internal_reference": "f8410984db774555B685DD933D3CB62A",
+                "external_reference": "783797406250422084416332"
+            },
+            "message": None
+        }
+
+        return jsonify(response), 201
+
+    except Exception as e:
+        return jsonify({"success": False, "message": str(e)}), 500
+
+
 @app.route("/insurance/switch/funeral", methods=["POST"])
 def upgrade_policy():
     try:
