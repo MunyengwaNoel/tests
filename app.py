@@ -1170,7 +1170,7 @@ policies = {
 }
 
 new_flex_policies = {
-    "success": true,
+    "success": True,
     "data": [
         {
             "id": "85adbdd4-3d50-4ced-8b1d-9eaf952ef4f9",
@@ -1187,7 +1187,7 @@ new_flex_policies = {
         {
             "id": "195000a3-cd06-4241-865d-0b39c91dafbf",
             "policyName": "Lite",
-            "withBus": true,
+            "withBus": True,
             "currency": "USD",
             "premium": "5.25",
             "minPayout": "0.00",
@@ -1211,7 +1211,7 @@ new_flex_policies = {
         {
             "id": "3e584bf4-8ea1-430e-8df0-a130815f118c",
             "policyName": "Classic",
-            "withBus": true,
+            "withBus": True,
             "currency": "USD",
             "premium": "5.50",
             "minPayout": "0.00",
@@ -1235,7 +1235,7 @@ new_flex_policies = {
         {
             "id": "9334ebac-829f-4cd9-ba94-32c2cfa0788a",
             "policyName": "Premium",
-            "withBus": true,
+            "withBus": True,
             "currency": "USD",
             "premium": "12.25",
             "minPayout": "0.00",
@@ -1259,7 +1259,7 @@ new_flex_policies = {
         {
             "id": "41bafcc3-3702-45be-953c-4cb4bb9983f2",
             "policyName": "Supreme",
-            "withBus": true,
+            "withBus": True,
             "currency": "USD",
             "premium": "15.75",
             "minPayout": "0.00",
@@ -1283,7 +1283,7 @@ new_flex_policies = {
         {
             "id": "4fd8970a-ff49-47b3-8423-d2dd064e9388",
             "policyName": "Lite",
-            "withBus": true,
+            "withBus": True,
             "currency": "ZWG",
             "premium": "30.64",
             "minPayout": "579.58",
@@ -1307,7 +1307,7 @@ new_flex_policies = {
         {
             "id": "7575cb79-c72c-4658-bc69-22428d0c4125",
             "policyName": "Classic",
-            "withBus": true,
+            "withBus": True,
             "currency": "ZWG",
             "premium": "34.57",
             "minPayout": "1448.95",
@@ -1331,7 +1331,7 @@ new_flex_policies = {
         {
             "id": "1ea99403-e4cd-41c0-8a44-1072585dd21f",
             "policyName": "Premium",
-            "withBus": true,
+            "withBus": True,
             "currency": "ZWG",
             "premium": "71.68",
             "minPayout": "4346.85",
@@ -1355,7 +1355,7 @@ new_flex_policies = {
         {
             "id": "4beef4e4-c18a-4fb5-a37a-4b2fbb71b8d1",
             "policyName": "Supreme",
-            "withBus": true,
+            "withBus": True,
             "currency": "ZWG",
             "premium": "90.83",
             "minPayout": "5795.80",
