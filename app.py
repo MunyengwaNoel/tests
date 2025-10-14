@@ -52,11 +52,11 @@ class FuneralSwitchRequest(BaseModel):
 
 class FlexDependantModel(BaseModel):
     dependantId: str
-    coverAmount: confloat(ge=0)
+    coverAmount: float = Field(..., ge=0, description="Cover amount must be >= 0")
 
 class FlexSwitchRequest(BaseModel):
     insuranceId: str
-    coverAmount: confloat(ge=0)
+    coverAmount: float = Field(..., ge=0, description="Cover amount must be >= 0")
     immediate: bool
     effective: str = Field(..., description="Effective date")
     
