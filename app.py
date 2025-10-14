@@ -47,7 +47,7 @@ class FuneralSwitchRequest(BaseModel):
     changeType: str
     dependants: List[FuneralDependantModel]
     class Config:
-        "extra":"forbid"  # ❌ no unknown fields
+        extra = "forbid"  # ❌ no unknown fields
 
 
 class FlexDependantModel(BaseModel):
@@ -62,7 +62,7 @@ class FlexSwitchRequest(BaseModel):
     changeType: str
     dependants: List[FlexDependantModel]
     class Config:
-        "extra":"forbid"  # ❌ no unknown fields
+        extra = "forbid"  # ❌ no unknown fields
 
 
 # -------------------------
@@ -333,7 +333,7 @@ class InsuranceSwitchRequest(BaseModel):
     dependants: List[DependantModel]
 
     class Config:
-        "extra":"forbid"  # ❌ forbid extra/unknown fields
+        extra = "forbid"  # ❌ forbid extra/unknown fields
 
 
 # # ---------- Endpoint ----------
