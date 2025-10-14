@@ -26,7 +26,7 @@ def get_policy():
 
 @app.route('/flex-policies', methods=['GET'])
 def get_flex_policy():
-    return jsonify(flex_policies)
+    return jsonify(new_flex_policies)
 
 
 
@@ -1165,6 +1165,204 @@ policies = {
             "status": "active",
             "created_at": "2025-04-14T06:25:29.000000Z",
             "updated_at": "2025-04-14T06:25:29.000000Z"
+        }
+    ]
+}
+
+new_flex_policies = {
+    "success": true,
+    "data": [
+        {
+            "id": "85adbdd4-3d50-4ced-8b1d-9eaf952ef4f9",
+            "policyName": "Lite",
+            "withBus": false,
+            "currency": "USD",
+            "premium": "2.75",
+            "minPayout": "0.00",
+            "maxPayout": "0.00",
+            "status": "active",
+            "createdAt": "2025-09-22T06:35:58.000000Z",
+            "updatedAt": "2025-09-22T06:35:58.000000Z"
+        },
+        {
+            "id": "195000a3-cd06-4241-865d-0b39c91dafbf",
+            "policyName": "Lite",
+            "withBus": true,
+            "currency": "USD",
+            "premium": "5.25",
+            "minPayout": "0.00",
+            "maxPayout": "0.00",
+            "status": "active",
+            "createdAt": "2025-09-22T06:35:58.000000Z",
+            "updatedAt": "2025-09-22T06:35:58.000000Z"
+        },
+        {
+            "id": "baa9dcc9-1d7f-46a5-a585-7d685977d1a0",
+            "policyName": "Classic",
+            "withBus": false,
+            "currency": "USD",
+            "premium": "3.25",
+            "minPayout": "0.00",
+            "maxPayout": "0.00",
+            "status": "active",
+            "createdAt": "2025-09-22T06:35:58.000000Z",
+            "updatedAt": "2025-09-22T06:35:58.000000Z"
+        },
+        {
+            "id": "3e584bf4-8ea1-430e-8df0-a130815f118c",
+            "policyName": "Classic",
+            "withBus": true,
+            "currency": "USD",
+            "premium": "5.50",
+            "minPayout": "0.00",
+            "maxPayout": "0.00",
+            "status": "active",
+            "createdAt": "2025-09-22T06:35:58.000000Z",
+            "updatedAt": "2025-09-22T06:35:58.000000Z"
+        },
+        {
+            "id": "aa8b63ae-8137-44d7-953c-6b8b479a227d",
+            "policyName": "Premium",
+            "withBus": false,
+            "currency": "USD",
+            "premium": "10.00",
+            "minPayout": "0.00",
+            "maxPayout": "0.00",
+            "status": "active",
+            "createdAt": "2025-09-22T06:35:58.000000Z",
+            "updatedAt": "2025-09-22T06:35:58.000000Z"
+        },
+        {
+            "id": "9334ebac-829f-4cd9-ba94-32c2cfa0788a",
+            "policyName": "Premium",
+            "withBus": true,
+            "currency": "USD",
+            "premium": "12.25",
+            "minPayout": "0.00",
+            "maxPayout": "0.00",
+            "status": "active",
+            "createdAt": "2025-09-22T06:35:58.000000Z",
+            "updatedAt": "2025-09-22T06:35:58.000000Z"
+        },
+        {
+            "id": "56f5ebdf-3b18-436c-9567-f764dfd0ff36",
+            "policyName": "Supreme",
+            "withBus": false,
+            "currency": "USD",
+            "premium": "13.25",
+            "minPayout": "0.00",
+            "maxPayout": "0.00",
+            "status": "active",
+            "createdAt": "2025-09-22T06:35:58.000000Z",
+            "updatedAt": "2025-09-22T06:35:58.000000Z"
+        },
+        {
+            "id": "41bafcc3-3702-45be-953c-4cb4bb9983f2",
+            "policyName": "Supreme",
+            "withBus": true,
+            "currency": "USD",
+            "premium": "15.75",
+            "minPayout": "0.00",
+            "maxPayout": "0.00",
+            "status": "active",
+            "createdAt": "2025-09-22T06:35:58.000000Z",
+            "updatedAt": "2025-09-22T06:35:58.000000Z"
+        },
+        {
+            "id": "71071bd5-04e8-4b17-b987-e3f1d9d17fec",
+            "policyName": "Lite",
+            "withBus": false,
+            "currency": "ZWG",
+            "premium": "16.40",
+            "minPayout": "579.58",
+            "maxPayout": "0.00",
+            "status": "active",
+            "createdAt": "2025-09-22T06:35:58.000000Z",
+            "updatedAt": "2025-09-22T06:35:58.000000Z"
+        },
+        {
+            "id": "4fd8970a-ff49-47b3-8423-d2dd064e9388",
+            "policyName": "Lite",
+            "withBus": true,
+            "currency": "ZWG",
+            "premium": "30.64",
+            "minPayout": "579.58",
+            "maxPayout": "0.00",
+            "status": "active",
+            "createdAt": "2025-09-22T06:35:58.000000Z",
+            "updatedAt": "2025-09-22T06:35:58.000000Z"
+        },
+        {
+            "id": "0d7a1ea1-0129-4e5c-9473-2dd8a5af4aac",
+            "policyName": "Classic",
+            "withBus": false,
+            "currency": "ZWG",
+            "premium": "20.32",
+            "minPayout": "1448.95",
+            "maxPayout": "0.00",
+            "status": "active",
+            "createdAt": "2025-09-22T06:35:58.000000Z",
+            "updatedAt": "2025-09-22T06:35:58.000000Z"
+        },
+        {
+            "id": "7575cb79-c72c-4658-bc69-22428d0c4125",
+            "policyName": "Classic",
+            "withBus": true,
+            "currency": "ZWG",
+            "premium": "34.57",
+            "minPayout": "1448.95",
+            "maxPayout": "0.00",
+            "status": "active",
+            "createdAt": "2025-09-22T06:35:58.000000Z",
+            "updatedAt": "2025-09-22T06:35:58.000000Z"
+        },
+        {
+            "id": "1cb68ac3-7032-43ef-abee-535fee14ad0c",
+            "policyName": "Premium",
+            "withBus": false,
+            "currency": "ZWG",
+            "premium": "57.43",
+            "minPayout": "4346.85",
+            "maxPayout": "0.00",
+            "status": "active",
+            "createdAt": "2025-09-22T06:35:58.000000Z",
+            "updatedAt": "2025-09-22T06:35:58.000000Z"
+        },
+        {
+            "id": "1ea99403-e4cd-41c0-8a44-1072585dd21f",
+            "policyName": "Premium",
+            "withBus": true,
+            "currency": "ZWG",
+            "premium": "71.68",
+            "minPayout": "4346.85",
+            "maxPayout": "0.00",
+            "status": "active",
+            "createdAt": "2025-09-22T06:35:58.000000Z",
+            "updatedAt": "2025-09-22T06:35:58.000000Z"
+        },
+        {
+            "id": "04d71264-9421-4ee6-93a8-b589d8277d69",
+            "policyName": "Supreme",
+            "withBus": false,
+            "currency": "ZWG",
+            "premium": "76.58",
+            "minPayout": "5795.80",
+            "maxPayout": "0.00",
+            "status": "active",
+            "createdAt": "2025-09-22T06:35:58.000000Z",
+            "updatedAt": "2025-09-22T06:35:58.000000Z"
+        },
+        {
+            "id": "4beef4e4-c18a-4fb5-a37a-4b2fbb71b8d1",
+            "policyName": "Supreme",
+            "withBus": true,
+            "currency": "ZWG",
+            "premium": "90.83",
+            "minPayout": "5795.80",
+            "maxPayout": "0.00",
+            "status": "active",
+            "createdAt": "2025-09-22T06:35:58.000000Z",
+            "updatedAt": "2025-09-22T06:35:58.000000Z"
         }
     ]
 }
