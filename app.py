@@ -4,6 +4,11 @@ import uuid
 import os
 from werkzeug.utils import secure_filename
 
+from pydantic import BaseModel, ValidationError, Field
+from typing import List
+from datetime import datetime
+
+
 from datetime import datetime
 
 app = Flask(__name__)
@@ -23,86 +28,251 @@ def get_policy():
 def get_flex_policy():
     return jsonify(flex_policies)
 
-@app.route("/insurance/switch/flex", methods=["POST"])
-def upgrade_flex_policy():
+
+
+
+# -------------------------
+# MODELS
+# -------------------------
+
+class FuneralDependantModel(BaseModel):
+    dependantId: str
+    newPolicyId: str
+
+class FuneralSwitchRequest(BaseModel):
+    insuranceId: str
+    newPolicyId: str
+    immediate: bool
+    effective: constr(strip_whitespace=True)
+    changeType: str
+    dependants: List[FuneralDependantModel]
+    class Config:
+        extra = "forbid"  # ❌ no unknown fields
+
+
+class FlexDependantModel(BaseModel):
+    dependantId: str
+    coverAmount: confloat(ge=0)
+
+class FlexSwitchRequest(BaseModel):
+    insuranceId: str
+    coverAmount: confloat(ge=0)
+    immediate: bool
+    effective: constr(strip_whitespace=True)
+    changeType: str
+    dependants: List[FlexDependantModel]
+    class Config:
+        extra = "forbid"  # ❌ no unknown fields
+
+
+# -------------------------
+# ENDPOINTS
+# -------------------------
+
+@app.route('/insurance/switch/funeral', methods=['POST'])
+def switch_funeral_insurance():
     try:
-        data = request.get_json()
+        body = FuneralSwitchRequest(**request.get_json())
+    except ValidationError as e:
+        return jsonify({
+            "success": False,
+            "message": "Invalid request body",
+            "errors": e.errors()
+        }), 400
 
-        insurance_id = data.get("insuranceId")
-        new_cover_amount = data.get("coverAmount")
-        immediate = data.get("immediate", False)
-        effective_date_str = data.get("effective")
-        change_type = data.get("changeType", "UPGRADE")
-        dependants = data.get("dependants", [])
-
-        # Simulated previous policy
-        from_policy_main = {
-            "id": "4b8e211a-9c7c-4b17-9ca9-d23c48d11811",
-            "type": "App\\Models\\FlexPlan",
-            "coverageAmount": "1567.00",
-            "premiumAmount": "4.49"
-        }
-
-        to_policy_main = {
-            "id": from_policy_main["id"],
-            "type": from_policy_main["type"],
-            "coverageAmount": new_cover_amount,
-            "premiumAmount": 5.85  # Simulated premium for new cover amount
-        }
-
-        # Simulated previous premium
-        previous_premium = float(from_policy_main["premiumAmount"])
-        new_premium = to_policy_main["premiumAmount"]
-
-        # Process dependant changes
-        dependant_changes = []
-        for dep in dependants:
-            dependant_changes.append({
-                "dependantId": dep.get("dependantId"),
-                "dependantName": "Elen",  # Normally fetched from DB
+    response = {
+        "success": True,
+        "data": {
+            "status": "success",
+            "policyChangeId": str(uuid.uuid7()),
+            "message": "Policy upgrade request processed successfully.",
+            "changeType": body.changeType,
+            "previousPremium": "5.50",
+            "newPremium": 11,
+            "effectiveDate": "2025-07-10",
+            "policyChanges": {
                 "fromPolicy": {
-                    "id": "82ad8099-bacb-4b2d-b080-41220fa2a0a8",
-                    "type": "App\\Models\\FlexPlan",
-                    "coverAmount": "1116.01",
-                    "premiumAmount": "1.67"
+                    "id": "192dc7d9-3656-4253-812d-47024855c76e",
+                    "name": "Lite",
+                    "type": "FuneralPlan",
+                    "coverageAmount": "2.75"
                 },
                 "toPolicy": {
-                    "id": "82ad8099-bacb-4b2d-b080-41220fa2a0a8",
-                    "type": "App\\Models\\FlexPlan",
-                    "coverAmount": dep.get("coverAmount"),
-                    "premiumAmount": 2.25  # Simulated premium for new cover amount
-                },
-                "premiumDifference": round(2.25 - 1.67, 2)
-            })
-
-        # Effective date formatting
-        effective_date = datetime.fromisoformat(effective_date_str).date() if effective_date_str else (datetime.utcnow() + timedelta(days=1)).date()
-
-        response = {
-            "success": True,
-            "data": {
-                "status": "success",
-                "policyChangeId": str(uuid.uuid4()),
-                "message": f"Policy {change_type} request processed successfully.",
-                "changeType": change_type,
-                "previousPremium": f"{previous_premium:.2f}",
-                "newPremium": new_premium,
-                "effectiveDate": str(effective_date),
-                "currency": "USD",
-                "policyChanges": {
-                    "fromPolicy": from_policy_main,
-                    "toPolicy": to_policy_main
-                },
-                "dependantChanges": dependant_changes,
-                "timestamp": datetime.utcnow().strftime("%Y-%m-%d %H:%M:%S")
+                    "id": "fcd475af-7781-461a-8a75-5c78c1abd5ac",
+                    "name": "Classic",
+                    "type": "FuneralPlan",
+                    "coverageAmount": "5.50"
+                }
             },
-            "message": "Operation successful"
-        }
+            "dependantChanges": [
+                {
+                    "dependantId": "94978713-f147-4285-b5a8-78534a8cf479",
+                    "dependantName": "Layla",
+                    "fromPolicy": {
+                        "id": "192dc7d9-3656-4253-812d-47024855c76e",
+                        "name": "Lite",
+                        "type": "FuneralPlan",
+                        "coverageAmount": "2.75"
+                    },
+                    "toPolicy": {
+                        "id": "fcd475af-7781-461a-8a75-5c78c1abd5ac",
+                        "name": "Classic",
+                        "type": "FuneralPlan",
+                        "coverageAmount": "5.50"
+                    },
+                    "premiumDifference": 2.75
+                }
+            ],
+            "timestamp": "2025-07-10 13:00:16"
+        },
+        "message": "Operation successful"
+    }
 
-        return jsonify(response), 201
+    return jsonify(response), 200
 
-    except Exception as e:
-        return jsonify({"success": False, "message": str(e)}), 500
+
+@app.route('/insurance/switch/flex', methods=['POST'])
+def switch_flex_insurance():
+    try:
+        body = FlexSwitchRequest(**request.get_json())
+    except ValidationError as e:
+        return jsonify({
+            "success": False,
+            "message": "Invalid request body",
+            "errors": e.errors()
+        }), 400
+
+    response = {
+        "success": True,
+        "data": {
+            "status": "success",
+            "policyChangeId": str(uuid.uuid7()),
+            "message": f"Policy {body.changeType} request processed successfully.",
+            "changeType": body.changeType,
+            "previousPremium": "4.49",
+            "newPremium": 5.85,
+            "effectiveDate": "2025-07-10",
+            "currency": "USD",
+            "policyChanges": {
+                "fromPolicy": {
+                    "id": "4b8e211a-9c7c-4b17-9ca9-d23c48d11811",
+                    "type": "App\\Models\\FlexPlan",
+                    "coverageAmount": "1567.00",
+                    "premiumAmount": "4.49"
+                },
+                "toPolicy": {
+                    "id": "4b8e211a-9c7c-4b17-9ca9-d23c48d11811",
+                    "type": "App\\Models\\FlexPlan",
+                    "coverageAmount": body.coverAmount,
+                    "premiumAmount": 5.85
+                }
+            },
+            "dependantChanges": [
+                {
+                    "dependantId": "15878c4b-1d04-4e51-a548-f57083e04c8f",
+                    "dependantName": "Elen",
+                    "fromPolicy": {
+                        "id": "82ad8099-bacb-4b2d-b080-41220fa2a0a8",
+                        "type": "App\\Models\\FlexPlan",
+                        "coverAmount": "1116.01",
+                        "premiumAmount": "1.67"
+                    },
+                    "toPolicy": {
+                        "id": "82ad8099-bacb-4b2d-b080-41220fa2a0a8",
+                        "type": "App\\Models\\FlexPlan",
+                        "coverAmount": body.dependants[0].coverAmount,
+                        "premiumAmount": 2.25
+                    },
+                    "premiumDifference": 0.58
+                }
+            ],
+            "timestamp": "2025-07-10 12:50:04"
+        },
+        "message": "Operation successful"
+    }
+
+    return jsonify(response), 200
+
+# @app.route("/insurance/switch/flex", methods=["POST"])
+# def upgrade_flex_policy():
+#     try:
+#         data = request.get_json()
+
+#         insurance_id = data.get("insuranceId")
+#         new_cover_amount = data.get("coverAmount")
+#         immediate = data.get("immediate", False)
+#         effective_date_str = data.get("effective")
+#         change_type = data.get("changeType", "UPGRADE")
+#         dependants = data.get("dependants", [])
+
+#         # Simulated previous policy
+#         from_policy_main = {
+#             "id": "4b8e211a-9c7c-4b17-9ca9-d23c48d11811",
+#             "type": "App\\Models\\FlexPlan",
+#             "coverageAmount": "1567.00",
+#             "premiumAmount": "4.49"
+#         }
+
+#         to_policy_main = {
+#             "id": from_policy_main["id"],
+#             "type": from_policy_main["type"],
+#             "coverageAmount": new_cover_amount,
+#             "premiumAmount": 5.85  # Simulated premium for new cover amount
+#         }
+
+#         # Simulated previous premium
+#         previous_premium = float(from_policy_main["premiumAmount"])
+#         new_premium = to_policy_main["premiumAmount"]
+
+#         # Process dependant changes
+#         dependant_changes = []
+#         for dep in dependants:
+#             dependant_changes.append({
+#                 "dependantId": dep.get("dependantId"),
+#                 "dependantName": "Elen",  # Normally fetched from DB
+#                 "fromPolicy": {
+#                     "id": "82ad8099-bacb-4b2d-b080-41220fa2a0a8",
+#                     "type": "App\\Models\\FlexPlan",
+#                     "coverAmount": "1116.01",
+#                     "premiumAmount": "1.67"
+#                 },
+#                 "toPolicy": {
+#                     "id": "82ad8099-bacb-4b2d-b080-41220fa2a0a8",
+#                     "type": "App\\Models\\FlexPlan",
+#                     "coverAmount": dep.get("coverAmount"),
+#                     "premiumAmount": 2.25  # Simulated premium for new cover amount
+#                 },
+#                 "premiumDifference": round(2.25 - 1.67, 2)
+#             })
+
+#         # Effective date formatting
+#         effective_date = datetime.fromisoformat(effective_date_str).date() if effective_date_str else (datetime.utcnow() + timedelta(days=1)).date()
+
+#         response = {
+#             "success": True,
+#             "data": {
+#                 "status": "success",
+#                 "policyChangeId": str(uuid.uuid4()),
+#                 "message": f"Policy {change_type} request processed successfully.",
+#                 "changeType": change_type,
+#                 "previousPremium": f"{previous_premium:.2f}",
+#                 "newPremium": new_premium,
+#                 "effectiveDate": str(effective_date),
+#                 "currency": "USD",
+#                 "policyChanges": {
+#                     "fromPolicy": from_policy_main,
+#                     "toPolicy": to_policy_main
+#                 },
+#                 "dependantChanges": dependant_changes,
+#                 "timestamp": datetime.utcnow().strftime("%Y-%m-%d %H:%M:%S")
+#             },
+#             "message": "Operation successful"
+#         }
+
+#         return jsonify(response), 201
+
+#     except Exception as e:
+#         return jsonify({"success": False, "message": str(e)}), 500
 
 
 @app.route("/insurance/funeral/process", methods=["POST"])
@@ -146,84 +316,174 @@ def buy_funeral_insurance():
         return jsonify({"success": False, "message": str(e)}), 500
 
 
-@app.route("/insurance/switch/funeral", methods=["POST"])
-def upgrade_policy():
+
+
+
+# ---------- Validation Models ----------
+class DependantModel(BaseModel):
+    dependantId: str
+    newPolicyId: str
+
+class InsuranceSwitchRequest(BaseModel):
+    insuranceId: str
+    newPolicyId: str
+    immediate: bool
+    effective: str
+    changeType: str
+    dependants: List[DependantModel]
+
+    class Config:
+        extra = "forbid"  # ❌ forbid extra/unknown fields
+
+
+# ---------- Endpoint ----------
+@app.route('/insurance/switch/funeral', methods=['POST'])
+def switch_funeral_insurance():
     try:
-        data_list = request.get_json()
-        
-        if not isinstance(data_list, list):
-            return jsonify({"success": False, "message": "Request body must be a list of policy changes."}), 400
+        # Validate incoming JSON strictly
+        data = InsuranceSwitchRequest(**request.get_json())
 
-        results = []
-
-        for data in data_list:
-            insurance_id = data.get("insuranceId")
-            new_policy_id = data.get("newPolicyId")
-            immediate = data.get("immediate", False)
-            effective = data.get("effective")
-            change_type = data.get("changeType", "UPGRADE")
-            dependants = data.get("dependants", [])
-            selected_dependants = data.get("selectedDependants", [])
-
-            # Simulate previous and new premiums
-            previous_premium = 5.50
-            new_premium = 11
-
-            # Simulate previous and new policies
-            from_policy = {
-                "id": "192dc7d9-3656-4253-812d-47024855c76e",
-                "name": "Lite",
-                "type": "FuneralPlan",
-                "coverageAmount": "2.75"
-            }
-
-            to_policy = {
-                "id": new_policy_id,
-                "name": "Classic",
-                "type": "FuneralPlan",
-                "coverageAmount": "5.50"
-            }
-
-            # Process dependants changes
-            dependant_changes = []
-            for dep in dependants:
-                if dep.get("dependantId") in selected_dependants:
-                    dependant_changes.append({
-                        "dependantId": dep.get("dependantId"),
-                        "dependantName": "Layla",  # Normally fetched from DB
-                        "fromPolicy": from_policy,
-                        "toPolicy": to_policy,
-                        "premiumDifference": float(to_policy["coverageAmount"]) - float(from_policy["coverageAmount"])
-                    })
-
-            # Effective date
-            effective_date = datetime.fromisoformat(effective.replace("Z", "+00:00")).date() if effective else (datetime.utcnow() + timedelta(days=1)).date()
-
-            results.append({
-                "status": "success",
-                "policyChangeId": str(uuid.uuid4()),
-                "message": "Policy upgrade request processed successfully.",
-                "insuranceId": insurance_id,
-                "changeType": change_type,
-                "previousPremium": str(previous_premium),
-                "newPremium": new_premium,
-                "effectiveDate": str(effective_date),
-                "policyChanges": {
-                    "fromPolicy": from_policy,
-                    "toPolicy": to_policy
-                },
-                "dependantChanges": dependant_changes,
-                "timestamp": datetime.utcnow().strftime("%Y-%m-%d %H:%M:%S")
-            })
-
+    except ValidationError as e:
+        # Return validation errors clearly
         return jsonify({
-            "success": True,
-            "data": results,
-            "message": "All policy upgrades processed successfully."
-        }), 201
+            "success": False,
+            "message": "Invalid request body",
+            "errors": e.errors()
+        }), 400
 
-    except Exception as e:
-        return jsonify({"success": False, "message": str(e)}), 500
+    # Simulate processing logic
+    policy_change_id = str(uuid.uuid7())
+    timestamp = datetime(2025, 7, 10, 13, 0, 16).strftime("%Y-%m-%d %H:%M:%S")
+
+    response = {
+        "success": True,
+        "data": {
+            "status": "success",
+            "policyChangeId": policy_change_id,
+            "message": "Policy upgrade request processed successfully.",
+            "changeType": data.changeType,
+            "previousPremium": "5.50",
+            "newPremium": 11,
+            "effectiveDate": "2025-07-10",
+            "policyChanges": {
+                "fromPolicy": {
+                    "id": "192dc7d9-3656-4253-812d-47024855c76e",
+                    "name": "Lite",
+                    "type": "FuneralPlan",
+                    "coverageAmount": "2.75"
+                },
+                "toPolicy": {
+                    "id": "fcd475af-7781-461a-8a75-5c78c1abd5ac",
+                    "name": "Classic",
+                    "type": "FuneralPlan",
+                    "coverageAmount": "5.50"
+                }
+            },
+            "dependantChanges": [
+                {
+                    "dependantId": "94978713-f147-4285-b5a8-78534a8cf479",
+                    "dependantName": "Layla",
+                    "fromPolicy": {
+                        "id": "192dc7d9-3656-4253-812d-47024855c76e",
+                        "name": "Lite",
+                        "type": "FuneralPlan",
+                        "coverageAmount": "2.75"
+                    },
+                    "toPolicy": {
+                        "id": "fcd475af-7781-461a-8a75-5c78c1abd5ac",
+                        "name": "Classic",
+                        "type": "FuneralPlan",
+                        "coverageAmount": "5.50"
+                    },
+                    "premiumDifference": 2.75
+                }
+            ],
+            "timestamp": timestamp
+        },
+        "message": "Operation successful"
+    }
+
+    return jsonify(response), 200
+
+
+# @app.route("/insurance/switch/funeral", methods=["POST"])
+# def upgrade_policy():
+#     try:
+#         data_list = request.get_json()
+        
+#         if not isinstance(data_list, list):
+#             return jsonify({"success": False, "message": "Request body must be a list of policy changes."}), 400
+
+#         results = []
+
+#         for data in data_list:
+#             insurance_id = data.get("insuranceId")
+#             new_policy_id = data.get("newPolicyId")
+#             immediate = data.get("immediate", False)
+#             effective = data.get("effective")
+#             change_type = data.get("changeType", "UPGRADE")
+#             dependants = data.get("dependants", [])
+#             selected_dependants = data.get("selectedDependants", [])
+
+#             # Simulate previous and new premiums
+#             previous_premium = 5.50
+#             new_premium = 11
+
+#             # Simulate previous and new policies
+#             from_policy = {
+#                 "id": "192dc7d9-3656-4253-812d-47024855c76e",
+#                 "name": "Lite",
+#                 "type": "FuneralPlan",
+#                 "coverageAmount": "2.75"
+#             }
+
+#             to_policy = {
+#                 "id": new_policy_id,
+#                 "name": "Classic",
+#                 "type": "FuneralPlan",
+#                 "coverageAmount": "5.50"
+#             }
+
+#             # Process dependants changes
+#             dependant_changes = []
+#             for dep in dependants:
+#                 if dep.get("dependantId") in selected_dependants:
+#                     dependant_changes.append({
+#                         "dependantId": dep.get("dependantId"),
+#                         "dependantName": "Layla",  # Normally fetched from DB
+#                         "fromPolicy": from_policy,
+#                         "toPolicy": to_policy,
+#                         "premiumDifference": float(to_policy["coverageAmount"]) - float(from_policy["coverageAmount"])
+#                     })
+
+#             # Effective date
+#             effective_date = datetime.fromisoformat(effective.replace("Z", "+00:00")).date() if effective else (datetime.utcnow() + timedelta(days=1)).date()
+
+#             results.append({
+#                 "status": "success",
+#                 "policyChangeId": str(uuid.uuid4()),
+#                 "message": "Policy upgrade request processed successfully.",
+#                 "insuranceId": insurance_id,
+#                 "changeType": change_type,
+#                 "previousPremium": str(previous_premium),
+#                 "newPremium": new_premium,
+#                 "effectiveDate": str(effective_date),
+#                 "policyChanges": {
+#                     "fromPolicy": from_policy,
+#                     "toPolicy": to_policy
+#                 },
+#                 "dependantChanges": dependant_changes,
+#                 "timestamp": datetime.utcnow().strftime("%Y-%m-%d %H:%M:%S")
+#             })
+
+#         return jsonify({
+#             "success": True,
+#             "data": results,
+#             "message": "All policy upgrades processed successfully."
+#         }), 201
+
+#     except Exception as e:
+#         return jsonify({"success": False, "message": str(e)}), 500
 
 
 # @app.route("/insurance/switch/funeral", methods=["POST"])
