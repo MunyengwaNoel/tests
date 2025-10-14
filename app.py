@@ -85,7 +85,7 @@ def switch_funeral_insurance():
         "success": True,
         "data": {
             "status": "success",
-            "policyChangeId": str(uuid.uuid7()),
+            "policyChangeId": str(uuid.uuid4()),
             "message": "Policy upgrade request processed successfully.",
             "changeType": body.changeType,
             "previousPremium": "5.50",
@@ -147,7 +147,7 @@ def switch_flex_insurance():
         "success": True,
         "data": {
             "status": "success",
-            "policyChangeId": str(uuid.uuid7()),
+            "policyChangeId": str(uuid.uuid4()),
             "message": f"Policy {body.changeType} request processed successfully.",
             "changeType": body.changeType,
             "previousPremium": "4.49",
@@ -353,7 +353,7 @@ class InsuranceSwitchRequest(BaseModel):
 #         }), 400
 
 #     # Simulate processing logic
-#     policy_change_id = str(uuid.uuid7())
+#     policy_change_id = str(uuid.uuid4())
 #     timestamp = datetime(2025, 7, 10, 13, 0, 16).strftime("%Y-%m-%d %H:%M:%S")
 
 #     response = {
