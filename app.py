@@ -336,74 +336,74 @@ class InsuranceSwitchRequest(BaseModel):
         extra = "forbid"  # ❌ forbid extra/unknown fields
 
 
-# ---------- Endpoint ----------
-@app.route('/insurance/switch/funeral', methods=['POST'])
-def switch_funeral_insurance():
-    try:
-        # Validate incoming JSON strictly
-        data = InsuranceSwitchRequest(**request.get_json())
+# # ---------- Endpoint ----------
+# @app.route('/insurance/switch/funeral', methods=['POST'])
+# def switch_funeral_insurance():
+#     try:
+#         # Validate incoming JSON strictly
+#         data = InsuranceSwitchRequest(**request.get_json())
 
-    except ValidationError as e:
-        # Return validation errors clearly
-        return jsonify({
-            "success": False,
-            "message": "Invalid request body",
-            "errors": e.errors()
-        }), 400
+#     except ValidationError as e:
+#         # Return validation errors clearly
+#         return jsonify({
+#             "success": False,
+#             "message": "Invalid request body",
+#             "errors": e.errors()
+#         }), 400
 
-    # Simulate processing logic
-    policy_change_id = str(uuid.uuid7())
-    timestamp = datetime(2025, 7, 10, 13, 0, 16).strftime("%Y-%m-%d %H:%M:%S")
+#     # Simulate processing logic
+#     policy_change_id = str(uuid.uuid7())
+#     timestamp = datetime(2025, 7, 10, 13, 0, 16).strftime("%Y-%m-%d %H:%M:%S")
 
-    response = {
-        "success": True,
-        "data": {
-            "status": "success",
-            "policyChangeId": policy_change_id,
-            "message": "Policy upgrade request processed successfully.",
-            "changeType": data.changeType,
-            "previousPremium": "5.50",
-            "newPremium": 11,
-            "effectiveDate": "2025-07-10",
-            "policyChanges": {
-                "fromPolicy": {
-                    "id": "192dc7d9-3656-4253-812d-47024855c76e",
-                    "name": "Lite",
-                    "type": "FuneralPlan",
-                    "coverageAmount": "2.75"
-                },
-                "toPolicy": {
-                    "id": "fcd475af-7781-461a-8a75-5c78c1abd5ac",
-                    "name": "Classic",
-                    "type": "FuneralPlan",
-                    "coverageAmount": "5.50"
-                }
-            },
-            "dependantChanges": [
-                {
-                    "dependantId": "94978713-f147-4285-b5a8-78534a8cf479",
-                    "dependantName": "Layla",
-                    "fromPolicy": {
-                        "id": "192dc7d9-3656-4253-812d-47024855c76e",
-                        "name": "Lite",
-                        "type": "FuneralPlan",
-                        "coverageAmount": "2.75"
-                    },
-                    "toPolicy": {
-                        "id": "fcd475af-7781-461a-8a75-5c78c1abd5ac",
-                        "name": "Classic",
-                        "type": "FuneralPlan",
-                        "coverageAmount": "5.50"
-                    },
-                    "premiumDifference": 2.75
-                }
-            ],
-            "timestamp": timestamp
-        },
-        "message": "Operation successful"
-    }
+#     response = {
+#         "success": True,
+#         "data": {
+#             "status": "success",
+#             "policyChangeId": policy_change_id,
+#             "message": "Policy upgrade request processed successfully.",
+#             "changeType": data.changeType,
+#             "previousPremium": "5.50",
+#             "newPremium": 11,
+#             "effectiveDate": "2025-07-10",
+#             "policyChanges": {
+#                 "fromPolicy": {
+#                     "id": "192dc7d9-3656-4253-812d-47024855c76e",
+#                     "name": "Lite",
+#                     "type": "FuneralPlan",
+#                     "coverageAmount": "2.75"
+#                 },
+#                 "toPolicy": {
+#                     "id": "fcd475af-7781-461a-8a75-5c78c1abd5ac",
+#                     "name": "Classic",
+#                     "type": "FuneralPlan",
+#                     "coverageAmount": "5.50"
+#                 }
+#             },
+#             "dependantChanges": [
+#                 {
+#                     "dependantId": "94978713-f147-4285-b5a8-78534a8cf479",
+#                     "dependantName": "Layla",
+#                     "fromPolicy": {
+#                         "id": "192dc7d9-3656-4253-812d-47024855c76e",
+#                         "name": "Lite",
+#                         "type": "FuneralPlan",
+#                         "coverageAmount": "2.75"
+#                     },
+#                     "toPolicy": {
+#                         "id": "fcd475af-7781-461a-8a75-5c78c1abd5ac",
+#                         "name": "Classic",
+#                         "type": "FuneralPlan",
+#                         "coverageAmount": "5.50"
+#                     },
+#                     "premiumDifference": 2.75
+#                 }
+#             ],
+#             "timestamp": timestamp
+#         },
+#         "message": "Operation successful"
+#     }
 
-    return jsonify(response), 200
+#     return jsonify(response), 200
 
 
 # @app.route("/insurance/switch/funeral", methods=["POST"])
