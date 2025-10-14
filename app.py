@@ -43,7 +43,7 @@ class FuneralSwitchRequest(BaseModel):
     insuranceId: str
     newPolicyId: str
     immediate: bool
-    effective: constr(strip_whitespace=True)
+    effective: str = Field(..., description="Effective date")
     changeType: str
     dependants: List[FuneralDependantModel]
     class Config:
@@ -58,7 +58,8 @@ class FlexSwitchRequest(BaseModel):
     insuranceId: str
     coverAmount: confloat(ge=0)
     immediate: bool
-    effective: constr(strip_whitespace=True)
+    effective: str = Field(..., description="Effective date")
+    
     changeType: str
     dependants: List[FlexDependantModel]
     class Config:
