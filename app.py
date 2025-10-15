@@ -966,7 +966,7 @@ policies = {
             "policy_name": "Lite",
             "with_bus": False,
             "currency": None,
-            "premium": "2.75",
+            "premium": "244444.00",
             "min_payout": "0.00",
             "max_payout": "0.00",
             "status": "active",
