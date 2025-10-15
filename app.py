@@ -72,6 +72,7 @@ class FlexSwitchRequest(BaseModel):
 
 @app.route('/insurance/switch/funeral', methods=['POST'])
 def switch_funeral_insurance():
+    print(request.get_json())
     try:
         body = FuneralSwitchRequest(**request.get_json())
     except ValidationError as e:
@@ -134,6 +135,7 @@ def switch_funeral_insurance():
 
 @app.route('/insurance/switch/flex', methods=['POST'])
 def switch_flex_insurance():
+    print(request.get_json())
     try:
         body = FlexSwitchRequest(**request.get_json())
     except ValidationError as e:
