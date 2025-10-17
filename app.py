@@ -3,6 +3,8 @@ from flask import request
 import uuid
 import os
 from werkzeug.utils import secure_filename
+import random
+import string
 
 from pydantic import BaseModel, ValidationError, Field
 from typing import List
@@ -131,6 +133,168 @@ def switch_funeral_insurance():
     }
 
     return jsonify(response), 200
+
+
+
+@app.route('/insurance/flex/quotation', methods=['POST'])
+def flex_quotation():
+    try:
+        data = request.get_json()
+
+        # ✅ Validate input
+        if not data or 'currencyCode' not in data or 'coverAmount' not in data:
+            return jsonify({"success": False, "message": "Invalid request body"}), 400
+
+        currency_code = data.get("currencyCode")
+        cover_amount = data.get("coverAmount")
+        dependants = data.get("dependants", [])
+
+        # Constants for demo
+        user_id = "c2759474-10a1-706e-cbaf-542d48eb1aa6"
+        policy_id = "9c3f0e47-d6c7-4948-897f-3bd201b213fa"
+        premium_rate = 1.80
+        min_payout = 1000.00
+        currency = "USD"
+
+        # Calculate main policy premium
+        main_premium = round((cover_amount * premium_rate) / min_payout, 2)
+
+        # Calculate dependants premiums
+        dependants_list = []
+        dependants_total = 0.0
+        for dep in dependants:
+            dep_cover = dep.get("coverAmount", 0)
+            dep_premium = round((dep_cover * premium_rate) / min_payout, 2)
+            dependants_total += dep_premium
+            dependants_list.append({
+                "age": 19,  # example fixed
+                "policy_id": policy_id,
+                "cover_amount": dep_cover,
+                "premium_amount": dep_premium,
+                "premium_rate": f"{premium_rate:.2f}",
+                "min_payout": f"{min_payout:.2f}",
+                "currency_code": currency,
+                "coverAmount": dep_cover,
+                "dependantId": dep.get("dependantId")
+            })
+
+        # Total premium
+        total_premium = round(main_premium + dependants_total, 2)
+
+        # Response construction
+        response = {
+            "success": True,
+            "data": {
+                "id": str(uuid.uuid4()),
+                "userId": user_id,
+                "service": "LIFE",
+                "serviceType": "FLEX",
+                "currencyCode": currency_code,
+                "totalAmount": f"{total_premium:.2f}",
+                "monthsInsured": 1,
+                "premium": f"{total_premium:.2f}",
+                "stampDuty": None,
+                "expiresAt": (datetime.utcnow() + timedelta(days=30)).isoformat() + "Z",
+                "status": "pending",
+                "metadata": {
+                    "main_policy": {
+                        "age": 58,
+                        "policy_id": policy_id,
+                        "cover_amount": cover_amount,
+                        "premium_amount": main_premium,
+                        "premium_rate": f"{premium_rate:.2f}",
+                        "min_payout": f"{min_payout:.2f}",
+                        "currency_code": currency,
+                        "userId": user_id,
+                        "currency": currency,
+                        "coverAmount": cover_amount
+                    },
+                    "dependants": dependants_list,
+                    "calculation_details": {
+                        "formula": "(cover_amount * premium_rate) / min_payout",
+                        "example": f"({cover_amount} * {premium_rate}) / {min_payout:.2f} = {main_premium}"
+                    }
+                },
+                "request": {
+                    "userId": user_id,
+                    "currencyCode": currency_code,
+                    "coverAmount": cover_amount,
+                    "dependants": dependants,
+                    "currency": currency
+                },
+                "createdAt": datetime.utcnow().isoformat() + "Z",
+                "updatedAt": datetime.utcnow().isoformat() + "Z"
+            },
+            "message": "Quotation generated successfully"
+        }
+
+        return jsonify(response), 200
+
+    except Exception as e:
+        return jsonify({"success": False, "message": str(e)}), 500
+
+
+
+
+
+
+
+
+def generate_reference(prefix="FLE"):
+    """Generate a random internal reference like FLE-QGYOSDUKKS"""
+    random_part = ''.join(random.choices(string.ascii_uppercase, k=10))
+    return f"{prefix}-{random_part}"
+
+@app.route('/insurance/flex/payment', methods=['POST'])
+def flex_payment():
+    try:
+        data = request.get_json()
+
+        # ✅ Validate input
+        if not data or "quotationId" not in data or "paymentDetails" not in data:
+            return jsonify({"success": False, "message": "Invalid request body"}), 400
+        
+        quotation_id = data.get("quotationId")
+        payment_details = data.get("paymentDetails", {})
+        payment_method = payment_details.get("paymentMethod")
+        account_number = payment_details.get("accountNumber")
+
+        # ✅ Generate dynamic fields
+        reference_code = generate_reference()
+        transaction_id = str(uuid.uuid4())
+        insurance_id = str(uuid.uuid4())
+        payment_id = str(uuid.uuid4())
+        internal_ref = ''.join(random.choices('0123456789ABCDEF', k=30))
+        external_ref = f"{account_number[-9:]}{datetime.utcnow().strftime('%d%m%H%M%S%f')[:12]}"
+
+        response = {
+            "success": True,
+            "data": {
+                "status": "PENDING",
+                "message": reference_code,
+                "transactionId": transaction_id,
+                "insuranceId": insurance_id,
+                "amount": "4.83",
+                "currency": "890",
+                "paymentId": payment_id,
+                "checkoutId": None,
+                "checkoutNdc": None,
+                "buildNumber": None,
+                "description": reference_code,
+                "paymentMethod": payment_method,
+                "internalReference": internal_ref,
+                "externalReference": external_ref
+            },
+            "message": reference_code
+        }
+
+        return jsonify(response), 200
+
+    except Exception as e:
+        return jsonify({"success": False, "message": str(e)}), 500
+
+
+
 
 
 @app.route('/insurance/switch/flex', methods=['POST'])
