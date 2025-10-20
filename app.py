@@ -137,6 +137,67 @@ def switch_funeral_insurance():
 
 
 
+def generate_flex_reference(prefix="FLE"):
+    """Generate a random reference like FLE-QGYOSDUKKS"""
+    random_part = ''.join(random.choices(string.ascii_uppercase, k=10))
+    return f"{prefix}-{random_part}"
+
+@app.route('/insurance/flex/process', methods=['POST'])
+def process_flex_insurance():
+    try:
+        data = request.get_json()
+
+        # ✅ Validate request
+        if not data or "quotationId" not in data or "paymentDetails" not in data:
+            return jsonify({
+                "success": False,
+                "message": "Invalid request body. 'quotationId' and 'paymentDetails' are required."
+            }), 400
+
+        quotation_id = data.get("quotationId")
+        payment_details = data.get("paymentDetails", {})
+        payment_method = payment_details.get("paymentMethod", "")
+        account_number = payment_details.get("accountNumber", "")
+
+        # ✅ Generate dynamic fields
+        reference_code = generate_flex_reference()
+        transaction_id = str(uuid.uuid4())
+        insurance_id = str(uuid.uuid4())
+        payment_id = str(uuid.uuid4())
+        internal_ref = ''.join(random.choices('0123456789ABCDEF', k=30))
+        external_ref = f"{account_number[-9:]}{datetime.utcnow().strftime('%d%m%H%M%S%f')[:12]}"
+
+        # ✅ Construct response
+        response = {
+            "success": True,
+            "data": {
+                "status": "PENDING",
+                "message": reference_code,
+                "transactionId": transaction_id,
+                "insuranceId": insurance_id,
+                "amount": "4.83",
+                "currency": "890",
+                "paymentId": payment_id,
+                "checkoutId": None,
+                "checkoutNdc": None,
+                "buildNumber": None,
+                "description": reference_code,
+                "paymentMethod": payment_method,
+                "internalReference": internal_ref,
+                "externalReference": external_ref
+            },
+            "message": reference_code
+        }
+
+        return jsonify(response), 200
+
+    except Exception as e:
+        return jsonify({
+            "success": False,
+            "message": str(e)
+        }), 500
+
+
 @app.route('/insurance/flex/quotation', methods=['POST'])
 def flex_quotation():
     try:
