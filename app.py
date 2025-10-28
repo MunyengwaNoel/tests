@@ -142,6 +142,155 @@ def generate_flex_reference(prefix="FLE"):
     random_part = ''.join(random.choices(string.ascii_uppercase, k=10))
     return f"{prefix}-{random_part}"
 
+
+@app.route('/insurance/attach/dependants', methods=['POST'])
+def attach_dependants():
+    try:
+        data = request.get_json()
+
+        # ✅ Validate input
+        if not data or "insuranceId" not in data or "dependants" not in data:
+            return jsonify({
+                "success": False,
+                "message": "Invalid request. 'insuranceId' and 'dependants' are required."
+            }), 400
+
+        insurance_id = data.get("insuranceId")
+        dependants = data.get("dependants", [])
+
+        # Example existing dependants (for demonstration)
+        existing_dependants = [
+            {
+                "id": "e2303263-b074-4044-84d8-16ad7b6ed7f1",
+                "user_id": "d2f52404-1041-701e-e810-4dc57855f83d",
+                "gender": "male",
+                "title": "Mr",
+                "relationship": "Brother",
+                "first_name": "James",
+                "last_name": "Murphy",
+                "national_id": "1400009M12",
+                "date_of_birth": "1980-06-20T00:00:00.000000Z",
+                "phone_number": "+263712252252",
+                "province": "Midlands",
+                "address": "44 Mainway Meadows",
+                "pivot": {
+                    "insurable_type": "App\\Models\\LifeInsurance",
+                    "insurable_id": insurance_id,
+                    "dependant_id": "e2303263-b074-4044-84d8-16ad7b6ed7f1",
+                    "cover_amount": "1116.01",
+                    "coverage_amount": "2.01",
+                    "is_primary": True,
+                    "relationship_type": "Brother",
+                    "policy_id": "6fb41a4e-7e62-4b84-8951-f701bf6cbae0",
+                    "policy_type": "App\\Models\\FlexPlan",
+                    "created_at": "2025-06-18T08:27:42.000000Z",
+                    "updated_at": "2025-06-18T08:27:42.000000Z"
+                }
+            },
+            {
+                "id": "4a07ad72-f6cb-4059-babc-41583f6d2632",
+                "user_id": "d2f52404-1041-701e-e810-4dc57855f83d",
+                "gender": "male",
+                "title": "Mrs",
+                "relationship": "Wifey",
+                "first_name": "Layla",
+                "last_name": "Murphy",
+                "national_id": "1500009M12",
+                "date_of_birth": "1990-06-20T00:00:00.000000Z",
+                "phone_number": "+263712252009",
+                "province": "Midlands",
+                "address": "44 Mainway Meadows",
+                "pivot": {
+                    "insurable_type": "App\\Models\\LifeInsurance",
+                    "insurable_id": insurance_id,
+                    "dependant_id": "4a07ad72-f6cb-4059-babc-41583f6d2632",
+                    "cover_amount": "1180.00",
+                    "coverage_amount": "2.12",
+                    "is_primary": True,
+                    "relationship_type": "Wifey",
+                    "policy_id": "6fb41a4e-7e62-4b84-8951-f701bf6cbae0",
+                    "policy_type": "App\\Models\\FlexPlan",
+                    "created_at": "2025-06-30T10:01:52.000000Z",
+                    "updated_at": "2025-06-30T10:01:52.000000Z"
+                }
+            }
+        ]
+
+        # ✅ Simulate attaching new dependants
+        new_dependants = []
+        for dep in dependants:
+            dependant_id = dep.get("dependantId")
+            cover_amount = dep.get("coverAmount")
+            coverage_amount = str(round(float(cover_amount) / 667, 2))  # demo calc
+
+            new_dependants.append({
+                "id": dependant_id,
+                "user_id": "d2f52404-1041-701e-e810-4dc57855f83d",
+                "gender": "male",
+                "title": "Miss",
+                "relationship": "Daughter",
+                "first_name": "Elen",
+                "last_name": "Murphy",
+                "national_id": "1700009M12",
+                "date_of_birth": "2015-06-20T00:00:00.000000Z",
+                "province": "Midlands",
+                "address": "44 Mainway Meadows",
+                "pivot": {
+                    "insurable_type": "App\\Models\\LifeInsurance",
+                    "insurable_id": insurance_id,
+                    "dependant_id": dependant_id,
+                    "cover_amount": cover_amount,
+                    "coverage_amount": coverage_amount,
+                    "is_primary": True,
+                    "relationship_type": "Daughter",
+                    "policy_id": str(uuid.uuid4()),
+                    "policy_type": "App\\Models\\FlexPlan",
+                    "created_at": datetime.utcnow().isoformat() + "Z",
+                    "updated_at": datetime.utcnow().isoformat() + "Z"
+                }
+            })
+
+        # Merge existing + new
+        all_dependants = existing_dependants + new_dependants
+
+        # ✅ Construct main insurance object
+        insurance_data = {
+            "id": insurance_id,
+            "user_id": "d2f52404-1041-701e-e810-4dc57855f83d",
+            "policy_number": None,
+            "policy_ref_number": "685278B31588F",
+            "currency": "USD",
+            "premium_amount": 8.72,
+            "cover_amount": "1567.00",
+            "with_bus": False,
+            "quotation_id": "50921780-1a5f-4f22-9aa9-b2c193089425",
+            "status": "ACTIVE",
+            "policy_type": "FLEX",
+            "plan_id": "6fb41a4e-7e62-4b84-8951-f701bf6cbae0",
+            "plan_type": "App\\Models\\FlexPlan",
+            "activated_at": "2025-06-18T08:28:35.000000Z",
+            "expires_at": "2026-06-18T08:28:35.000000Z",
+            "created_at": "2025-06-18T08:27:42.000000Z",
+            "updated_at": datetime.utcnow().isoformat() + "Z",
+            "dependants": all_dependants
+        }
+
+        response = {
+            "success": True,
+            "data": insurance_data,
+            "message": "Dependants attached successfully."
+        }
+
+        return jsonify(response), 200
+
+    except Exception as e:
+        return jsonify({
+            "success": False,
+            "message": str(e)
+        }), 500
+
+
+
 @app.route('/insurance/flex/process', methods=['POST'])
 def process_flex_insurance():
     try:
