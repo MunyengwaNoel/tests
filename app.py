@@ -109,7 +109,7 @@ def switch_funeral_insurance():
         }), 400
 
     response = {
-        "success": False,
+        "success": True,
         "data": {
             "status": "success",
             "policyChangeId": str(uuid.uuid4()),
