@@ -27,6 +27,29 @@ def get_policy():
     return jsonify(policies)
 
 
+@app.route("/insurance/switch/submit", methods=["POST"])
+def submit_policy_change():
+    data = request.get_json()
+
+    if not data or "policyChangeId" not in data:
+        return jsonify({
+            "success": False,
+            "message": "policyChangeId is required"
+        }), 400
+
+    policy_change_id = data.get("policyChangeId")
+
+    response = {
+        "success": True,
+        "data": {
+            "message": "Policy change submitted successfully.",
+            "policyChangeId": policy_change_id
+        },
+        "message": "Policy change submitted successfully."
+    }
+
+    return jsonify(response), 200
+
 @app.route('/flex-policies', methods=['GET'])
 def get_flex_policy():
     return jsonify(new_flex_policies)
