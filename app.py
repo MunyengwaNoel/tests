@@ -17,6 +17,264 @@ from datetime import datetime
 app = Flask(__name__)
 
 
+
+
+@app.route("/insurance/portfolio", methods=["GET"])
+def insurance_portfolio():
+
+    response = {
+      "success": True,
+      "data": {
+        "profile": {
+          "name": "Wedzerai  Munyengwa",
+          "title": "Mr",
+          "email": "wedzeraimunyengwa@gmail.com",
+          "phone": "+263784455799",
+          "dob": "1985-12-10",
+          "idNumber": "22235190J22",
+          "passportNumber": "",
+          "gender": "Male",
+          "address": ""
+        },
+        "policies": [
+          {
+            "policyNumber": "45419012",
+            "referenceNumber": "69021B9E598B6",
+            "premium": "9.00",
+            "idNumber": "22235190J22",
+            "insuranceType": "LifeInsurance"
+          },
+          {
+            "policyNumber": "48798463",
+            "referenceNumber": "69021BA15BB09",
+            "premium": "24.50",
+            "idNumber": "22235190J22",
+            "insuranceType": "LifeInsurance"
+          }
+        ],
+        "lifeInsurancePolicies": [
+          {
+            "id": "e3233fee-9dc6-4c19-9867-e51132b3e9a8",
+            "userId": "d2553434-1021-7025-6ef0-e42b89281c84",
+            "policyNumber": "45419012",
+            "policyRefNumber": "69021B9E598B6",
+            "policyType": "FLEX",
+            "currency": "USD",
+            "premiumAmount": "9.00",
+            "funeralPolicyId": None,
+            "withBus": False,
+            "status": "ACTIVE",
+            "activatedAt": "2025-10-30T08:18:31+00:00",
+            "expiresAt": None,
+            "failedAt": None,
+            "cancelledAt": None,
+            "cancellationReason": None,
+            "failureReason": None,
+            "createdAt": "2025-10-29T13:46:37+00:00",
+            "updatedAt": "2025-10-30T08:18:31+00:00",
+            "dependants": [
+              {
+                "id": "4d79882a-0cfd-4047-aa58-56f5cf08b542",
+                "user_id": "d2553434-1021-7025-6ef0-e42b89281c84",
+                "gender": "male",
+                "title": "Mr",
+                "relationship": "Brother",
+                "first_name": "Edwin",
+                "last_name": "Munyengwa",
+                "national_id": "22235190J22",
+                "date_of_birth": "1985-12-10T00:00:00.000000Z",
+                "phone_number": "0784455799",
+                "passport_number": None,
+                "email": None,
+                "province": "Harare",
+                "address": "4131 46th",
+                "metadata": None,
+                "created_at": "2025-10-29T12:53:42.000000Z",
+                "updated_at": "2025-10-29T12:53:42.000000Z",
+                "pivot": {
+                  "insurable_type": "App\\Models\\LifeInsurance",
+                  "insurable_id": "e3233fee-9dc6-4c19-9867-e51132b3e9a8",
+                  "dependant_id": "4d79882a-0cfd-4047-aa58-56f5cf08b542",
+                  "cover_amount": "2000.00",
+                  "coverage_amount": "3.60",
+                  "is_primary": True,
+                  "relationship_type": "Brother",
+                  "additional_data": None,
+                  "policy_id": "cb8e5d12-0f2b-43d5-961e-25a6cef731e5",
+                  "policy_type": "App\\Models\\FlexPlan",
+                  "created_at": "2025-10-29T13:46:37.000000Z",
+                  "updated_at": "2025-10-29T13:46:37.000000Z"
+                }
+              }
+            ],
+            "plan": {
+              "id": "cb8e5d12-0f2b-43d5-961e-25a6cef731e5",
+              "ageStart": 18,
+              "ageEnd": 65,
+              "coverMultiple": "0.00",
+              "currency": "USD",
+              "premium": "1.80",
+              "minPayout": "1000.00",
+              "maxPayout": "0.00",
+              "status": "active",
+              "created_at": "2025-10-29T08:48:04.000000Z",
+              "updated_at": "2025-10-29T08:48:04.000000Z"
+            },
+            "claims": [
+              {
+                "id": "019a34fb-bbf0-71dd-8b46-7251a84fa949",
+                "channel": "MOBILE",
+                "user_id": "d2553434-1021-7025-6ef0-e42b89281c84",
+                "life_insurance_id": "e3233fee-9dc6-4c19-9867-e51132b3e9a8",
+                "dependant_id": "4d79882a-0cfd-4047-aa58-56f5cf08b542",
+                "phone": "0784455799",
+                "email": "wedzeraimunyengwa@gmail.com",
+                "policy_type": "FLEX",
+                "claim_number": "CLM-QLMQTBNU",
+                "claim_status": "SUBMITTED",
+                "notes": None,
+                "deceased_name": "Edwin Munyengwa",
+                "plan_type": "",
+                "deceased_date_of_death": "2025-10-01T00:00:00.000000Z",
+                "cause_of_death": "Natural causes",
+                "place_of_death": "Harare",
+                "burial_order_number": "333333",
+                "bank_details": {
+                  "bank_name": "Omari",
+                  "account_name": "Wedzerai Munyengwa",
+                  "account_number": "0784455799",
+                  "branch_code": None,
+                  "account_type": "Savings",
+                  "bankDetails": {
+                    "bankName": "Omari",
+                    "accountHolderName": "Wedzerai Munyengwa",
+                    "accountNumber": "0784455799",
+                    "accountType": "Savings",
+                    "branchCode": None
+                  }
+                },
+                "created_at": "2025-10-30T11:58:24.000000Z",
+                "updated_at": "2025-10-30T11:58:24.000000Z"
+              }
+            ],
+            "riders": []
+          },
+          
+          # SECOND POLICY ↓
+          {
+            "id": "aa921a46-0601-4af7-8421-1496cf1cd83e",
+            "userId": "d2553434-1021-7025-6ef0-e42b89281c84",
+            "policyNumber": "48798463",
+            "policyRefNumber": "69021BA15BB09",
+            "policyType": "FUNERAL",
+            "currency": "USD",
+            "premiumAmount": "20.00",
+            "funeralPolicyId": None,
+            "withBus": False,
+            "status": "ACTIVE",
+            "activatedAt": "2025-10-30T08:17:59+00:00",
+            "expiresAt": None,
+            "failedAt": None,
+            "cancelledAt": None,
+            "cancellationReason": None,
+            "failureReason": None,
+            "createdAt": "2025-10-29T13:43:52+00:00",
+            "updatedAt": "2025-11-03T09:11:22+00:00",
+            "dependants": [
+              {
+                "id": "4d79882a-0cfd-4047-aa58-56f5cf08b542",
+                "user_id": "d2553434-1021-7025-6ef0-e42b89281c84",
+                "gender": "male",
+                "title": "Mr",
+                "relationship": "Brother",
+                "first_name": "Edwin",
+                "last_name": "Munyengwa",
+                "national_id": "22235190J22",
+                "date_of_birth": "1985-12-10T00:00:00.000000Z",
+                "phone_number": "0784455799",
+                "passport_number": None,
+                "email": None,
+                "province": "Harare",
+                "address": "4131 46th",
+                "metadata": None,
+                "created_at": "2025-10-29T12:53:42.000000Z",
+                "updated_at": "2025-10-29T12:53:42.000000Z",
+                "pivot": {
+                  "insurable_type": "App\\Models\\LifeInsurance",
+                  "insurable_id": "aa921a46-0601-4af7-8421-1496cf1cd83e",
+                  "dependant_id": "4d79882a-0cfd-4047-aa58-56f5cf08b542",
+                  "cover_amount": "10.00",
+                  "coverage_amount": "10.00",
+                  "is_primary": True,
+                  "relationship_type": "Brother",
+                  "additional_data": None,
+                  "policy_id": "9930d7e2-31aa-4c31-adf1-505d0d6ce987",
+                  "policy_type": "App\\Models\\FuneralPlan",
+                  "created_at": "2025-10-29T13:50:53.000000Z",
+                  "updated_at": "2025-10-30T09:57:01.000000Z"
+                }
+              }
+            ],
+            "plan": {
+              "id": "9930d7e2-31aa-4c31-adf1-505d0d6ce987",
+              "policy_name": "Premium",
+              "with_bus": False,
+              "currency": "USD",
+              "premium": "10.00",
+              "min_payout": "0.00",
+              "max_payout": "0.00",
+              "status": "active",
+              "precedence": 5,
+              "created_at": "2025-10-29T08:48:04.000000Z",
+              "updated_at": "2025-10-29T08:48:04.000000Z"
+            },
+            "claims": [
+              {
+                "id": "019a34f8-1d75-70f3-b333-dff8955a3299",
+                "channel": "MOBILE",
+                "user_id": "d2553434-1021-7025-6ef0-e42b89281c84",
+                "life_insurance_id": "aa921a46-0601-4af7-8421-1496cf1cd83e",
+                "dependant_id": "4d79882a-0cfd-4047-aa58-56f5cf08b542",
+                "phone": "0784455799",
+                "email": "wedzeraimunyengwa@gmail.com",
+                "policy_type": "FUNERAL",
+                "claim_number": "CLM-049YUYOQ",
+                "claim_status": "SUBMITTED",
+                "notes": None,
+                "deceased_name": "Edwin Munyengwa",
+                "plan_type": "",
+                "deceased_date_of_death": "2025-10-01T00:00:00.000000Z",
+                "cause_of_death": "Natural causes",
+                "place_of_death": "Harare",
+                "burial_order_number": "222222",
+                "bank_details": {
+                  "bank_name": "Equity Bank",
+                  "account_name": "John Doe",
+                  "account_number": "1234567890",
+                  "branch_code": None,
+                  "account_type": "Savings",
+                  "bankDetails": {
+                    "bankName": "Equity Bank",
+                    "accountHolderName": "John Doe",
+                    "accountNumber": "1234567890",
+                    "accountType": "Savings",
+                    "branchCode": None
+                  }
+                },
+                "created_at": "2025-10-30T11:54:27.000000Z",
+                "updated_at": "2025-10-30T11:54:27.000000Z"
+              }
+            ],
+            "riders": []
+          }
+        ]
+      },
+      "message": "Portfolio data retrieved successfully."
+    }
+
+    return jsonify(response), 200
+
+
 @app.route('/insurance/list/LifeInsurance', methods=['GET'])
 def get_subscribed_policies():
     return jsonify(subsrcibed_policies)
@@ -1267,26 +1525,26 @@ subsrcibed_policies = {
             "createdAt": "2025-06-10T09:59:49+00:00",
             "updatedAt": "2025-06-10T10:00:37+00:00"
         },
-        # {
-        #     "id": "325cd635-ae3c-414e-84fa-e0da3f1f81ac",
-        #     "userId": "c2759474-10a1-706e-cbaf-542d48eb1aa6",
-        #     "policyNumber": "48512651",
-        #     "policyRefNumber": "684801A1F30D8",
-        #     "policyType": "FUNERAL",
-        #     "currency": "USD",
-        #     "premiumAmount": "5.50",
-        #     "funeralPolicyId": None,
-        #     "withBus": False,
-        #     "status": "ACTIVE",
-        #     "activatedAt": "2025-06-10T09:57:53+00:00",
-        #     "expiresAt": "2026-06-10T09:57:53+00:00",
-        #     "failedAt": None,
-        #     "cancelledAt": None,
-        #     "cancellationReason": None,
-        #     "failureReason": None,
-        #     "createdAt": "2025-06-10T09:57:04+00:00",
-        #     "updatedAt": "2025-06-10T14:03:44+00:00"
-        # }
+        {
+            "id": "325cd635-ae3c-414e-84fa-e0da3f1f81ac",
+            "userId": "c2759474-10a1-706e-cbaf-542d48eb1aa6",
+            "policyNumber": "48512651",
+            "policyRefNumber": "684801A1F30D8",
+            "policyType": "FUNERAL",
+            "currency": "USD",
+            "premiumAmount": "5.50",
+            "funeralPolicyId": None,
+            "withBus": False,
+            "status": "ACTIVE",
+            "activatedAt": "2025-06-10T09:57:53+00:00",
+            "expiresAt": "2026-06-10T09:57:53+00:00",
+            "failedAt": None,
+            "cancelledAt": None,
+            "cancellationReason": None,
+            "failureReason": None,
+            "createdAt": "2025-06-10T09:57:04+00:00",
+            "updatedAt": "2025-06-10T14:03:44+00:00"
+        }
     ],
     "meta": {
         "count": 2,
