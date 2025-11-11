@@ -157,7 +157,66 @@ def insurance_portfolio():
                 "updated_at": "2025-10-30T11:58:24.000000Z"
               }
             ],
-            "riders": []
+            "riders": [
+                    {
+                        "id": "a1d0f9a3-1410-469e-b584-bde06381ee39",
+                        "user_id": "d2553434-1021-7025-6ef0-e42b89281c84",
+                        "policy_id": "aa921a46-0601-4af7-8421-1496cf1cd83e",
+                        "insurable_id": "aa921a46-0601-4af7-8421-1496cf1cd83e",
+                        "insurable_type": "App\\Models\\LifeInsurance",
+                        "dependant_id": None,
+                        "rider_id": "c5b908b8-ccf9-4527-bd5b-dbb873507557",
+                        "cover_amount": "1200.00",
+                        "premium": "3.00",
+                        "status": "ACTIVE",
+                        "state": "ACTIVE",
+                        "created_at": "2025-11-11T12:41:55.000000Z",
+                        "updated_at": "2025-11-11T12:43:05.000000Z",
+                        "rider": {
+                            "id": "c5b908b8-ccf9-4527-bd5b-dbb873507557",
+                            "name": "Income Stabilisation Rider",
+                            "description": "Provides income stabilization benefit",
+                            "extra_premium": "0.00",
+                            "active": True,
+                            "metadata": {
+                                "min_amount": 1200,
+                                "max_amount": 3000,
+                                "applicable_to": "principal_member_only"
+                            },
+                            "created_at": "2025-10-29T08:48:05.000000Z",
+                            "updated_at": "2025-10-29T08:48:05.000000Z"
+                        }
+                    },
+                    {
+                        "id": "7777e38d-703c-44ec-aad2-083114c54117",
+                        "user_id": "d2553434-1021-7025-6ef0-e42b89281c84",
+                        "policy_id": "aa921a46-0601-4af7-8421-1496cf1cd83e",
+                        "insurable_id": "aa921a46-0601-4af7-8421-1496cf1cd83e",
+                        "insurable_type": "App\\Models\\LifeInsurance",
+                        "dependant_id": "4d79882a-0cfd-4047-aa58-56f5cf08b542",
+                        "rider_id": "b2c908b8-ccf9-4527-bd5b-dbb873507559",
+                        "cover_amount": "500.00",
+                        "premium": "1.25",
+                        "status": "ACTIVE",
+                        "state": "ACTIVE",
+                        "created_at": "2025-11-11T12:41:55.000000Z",
+                        "updated_at": "2025-11-11T12:43:05.000000Z",
+                        "rider": {
+                            "id": "b2c908b8-ccf9-4527-bd5b-dbb873507559",
+                            "name": "Memorial Service Rider",
+                            "description": "Covers memorial service expenses",
+                            "extra_premium": "0.00",
+                            "active": True,
+                            "metadata": {
+                                "min_amount": 500,
+                                "max_amount": 1000,
+                                "max_for_child_dependent": 500
+                            },
+                            "created_at": "2025-10-29T08:48:05.000000Z",
+                            "updated_at": "2025-10-29T08:48:05.000000Z"
+                        }
+                    }
+                ]
           },
           
           # SECOND POLICY ↓
