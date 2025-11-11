@@ -161,8 +161,10 @@ def insurance_portfolio():
                     {
                         "id": "a1d0f9a3-1410-469e-b584-bde06381ee39",
                         "user_id": "d2553434-1021-7025-6ef0-e42b89281c84",
-                        "policy_id": "aa921a46-0601-4af7-8421-1496cf1cd83e",
-                        "insurable_id": "aa921a46-0601-4af7-8421-1496cf1cd83e",
+                        # "policy_id": "aa921a46-0601-4af7-8421-1496cf1cd83e",
+                        "policy_id":"e3233fee-9dc6-4c19-9867-e51132b3e9a8",
+                        # "insurable_id": "aa921a46-0601-4af7-8421-1496cf1cd83e",
+                        "insurable_id":"e3233fee-9dc6-4c19-9867-e51132b3e9a8",
                         "insurable_type": "App\\Models\\LifeInsurance",
                         "dependant_id": None,
                         "rider_id": "c5b908b8-ccf9-4527-bd5b-dbb873507557",
